@@ -158,5 +158,29 @@ import { Board } from 'react-native-draganddrop-board'
 | badgeHeight | `number` | no | height of the count badge |
 | badgeWidth | `string` | no | width of the count badge |
 | badgeTextColor | `string` | no | color of the count badge |
-| badgeFontSize | `number` | no | font size of the count badge |
-| badgeFontFamily | `string` | no | font family of the count badge |
+| badgeTextFontSize | `number` | no | font size of the count badge |
+| badgeTextFontFamily | `string` | no | font family of the count badge |
+| columnBackgroundColor | `string` | no | column background color |
+| columnBorderRadius | `number` | no | column border radius |
+| columnHeight | `number` | no | height of the column |
+| columnNameTextColor | `string` | no | color of the column |
+| columnNameFontSize | `number` | no | font size of the column |
+| columnNameFontFamily | `string` | no | font family of the column |
+| isWithCountBadge | `bool` | no | if false then the count badge is not visible |
+
+# Empty column component
+
+You can use default empty column component:
+
+| Property | Type | Required | Description |
+| :--- | :--- | :---: | :--- |
+| emptyIconColor | `string` | no | color of the icon |
+| emptyTextColor | `string` | no | color of the text |
+| emptyFontSize | `number` | no | font size of the text |
+| emptyFontFamily | `string` | no | font family of the text |
+
+You can also create your own empty column component: 
+
+| Property | Type | Required | Description |
+| :--- | :--- | :---: | :--- |
+| emptyComponent | `function` | no | function that should return custom empty column component |
