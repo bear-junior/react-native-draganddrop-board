@@ -4,7 +4,8 @@
   "description": "Drag and drop elements inside carousel",
   "main": "src/components/index.js",
   "scripts": {
-    "test": "yarn test"
+    "test": "jest --config=\"./jest/config.json\"",
+    "postinstall": "react-native link"
   },
   "repository": {
     "type": "git",
@@ -30,7 +31,6 @@
   "dependencies": {
     "lodash": "^4.17.15",
     "react-timeout": "^1.2.0",
-    "react-native-svg": "^9.13.3",
     "styled-components": "^4.4.1",
     "styled-system": "^5.1.2"
   },
