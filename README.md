@@ -6,7 +6,7 @@
 
 react-native-draganddrop-board is a simple React Native library, enabling to create a scrollable board component with carousel, sortable columns and draggable cards for your iOS and Android apps.
 
-
+![Move Gif](./src/assets/images/move.gif) ![MoveInColumn Gif](./src/assets/images/moveInColumn.gif) ![Scroll Gif](./src/assets/images/scroll.gif)
 
 # Installation
 
@@ -170,6 +170,9 @@ import { Board } from 'react-native-draganddrop-board'
 
 # Empty column component
 
+
+![Empty Gif](./src/assets/images/empty.gif)
+
 You can use default empty column component:
 
 | Property | Type | Required | Description |
@@ -184,3 +187,11 @@ You can also create your own empty column component:
 | Property | Type | Required | Description |
 | :--- | :--- | :---: | :--- |
 | emptyComponent | `function` | no | function that should return custom empty column component |
+
+# License
+
+Copyright (c) 2019, Natalia Muryn
+
+Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
