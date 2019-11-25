@@ -106,6 +106,8 @@ import { Board } from 'react-native-draganddrop-board'
 | open | `function` | yes | function invoked when item is pressed, returns item |
 | onDragEnd | `function` | yes | function invoked when drag is finished, returns srcColumnId, destColumnId, draggedItem |
 
+All props from Board, Card, Column and Empty components should be added to `<Board />`
+
 # Card component
 
 If you want to use default Card you should build your boardRepository with rows that have elements `id`, `name`and `description`:
@@ -187,6 +189,10 @@ You can also create your own empty column component:
 | Property | Type | Required | Description |
 | :--- | :--- | :---: | :--- |
 | emptyComponent | `function` | no | function that should return custom empty column component |
+
+# Tech stack
+
+React Native 0.61.4
 
 # License
 
