@@ -217,6 +217,8 @@ class Board extends React.Component {
         x = deviceWidth - (0.78 * deviceWidth)
       }
 
+      const { y } = item.layout()
+
       if (columnId - 1 === columnIndex) {
         boardRepository.hide(columnId, item)
         this.setState({
@@ -224,7 +226,7 @@ class Board extends React.Component {
           draggedItem: item,
           srcColumnId: item.columnId(),
           startingX: x,
-          startingY: dy - boardPositionY - SEARCHBAR_HEIGHT
+          startingY: dy - boardPositionY - SEARCHBAR_HEIGHT - (ios ? 0 : (dy - y))
         })
         this.rotate(MAX_DEG)
       }

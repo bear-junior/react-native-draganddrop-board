@@ -328,10 +328,14 @@ class Carousel extends Component {
         ...this.props,
         ...this.getComponentStaticProps()
       }
-      const { data, oneColumn } = this.props
+      const {
+        data,
+        oneColumn,
+        scrollEnabled
+      } = this.props
 
       return (
-        <ScrollView {...props} scrollEnabled={!oneColumn}>
+        <ScrollView {...props} scrollEnabled={scrollEnabled && !oneColumn}>
           {data.map((item, index) => this.renderItem({ item, index }))}
         </ScrollView>
       )

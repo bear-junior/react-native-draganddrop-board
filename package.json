@@ -1,6 +1,6 @@
 {
   "name": "react-native-draganddrop-board",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Drag and drop elements inside carousel",
   "main": "src/components/index.js",
   "scripts": {
