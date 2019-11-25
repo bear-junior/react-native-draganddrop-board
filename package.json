@@ -24,11 +24,12 @@
   "author": "Natalia Muryn",
   "license": "MIT",
   "peerDependencies": {
-  "react": "16.9.0",
-  "react-native": "0.61.5"
+    "react": "16.9.0",
+    "react-native": "0.61.5"
   },
   "dependencies": {
     "lodash": "^4.17.15",
+    "react-native-draganddrop-board": "https://github.com/bear-junior/react-native-draganddrop-board",
     "react-timeout": "^1.2.0",
     "styled-components": "^4.4.1",
     "styled-system": "^5.1.2"
@@ -41,9 +42,9 @@
     "eslint": "^6.7.0",
     "jest": "^24.9.0",
     "metro-react-native-babel-preset": "^0.57.0",
-    "react-test-renderer": "^16.12.0",
     "react": "16.9.0",
-    "react-native": "0.61.5"
+    "react-native": "0.61.5",
+    "react-test-renderer": "^16.12.0"
   },
   "bugs": {
     "url": "https://github.com/bear-junior/react-native-draganddrop-board/issues"
