@@ -1,0 +1,54 @@
+{
+  "name": "react-native-draganddrop-board",
+  "version": "1.0.0",
+  "description": "Drag and drop elements inside carousel",
+  "main": "src/components/index.js",
+  "scripts": {
+    "test": "yarn test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bear-junior/react-native-draganddrop-board.git"
+  },
+  "keywords": [
+    "draggable",
+    "board",
+    "drag",
+    "and",
+    "drop",
+    "react",
+    "native",
+    "drag and drop",
+    "react-native"
+  ],
+  "author": "Natalia Muryn",
+  "license": "MIT",
+  "peerDependencies": {
+  "react": "16.9.0",
+  "react-native": "0.61.5",
+  "react-native-svg": "^9.13.3"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15",
+    "react-timeout": "^1.2.0",
+    "styled-components": "^4.4.1",
+    "styled-system": "^5.1.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.4",
+    "@babel/runtime": "^7.7.4",
+    "@react-native-community/eslint-config": "^0.0.5",
+    "babel-jest": "^24.9.0",
+    "eslint": "^6.7.0",
+    "jest": "^24.9.0",
+    "metro-react-native-babel-preset": "^0.57.0",
+    "react-test-renderer": "^16.12.0",
+    "react": "16.9.0",
+    "react-native": "0.61.5",
+    "react-native-svg": "^9.13.3"
+  },
+  "bugs": {
+    "url": "https://github.com/bear-junior/react-native-draganddrop-board/issues"
+  },
+  "homepage": "https://github.com/bear-junior/react-native-draganddrop-board#readme"
+}
