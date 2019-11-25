@@ -28,13 +28,12 @@ exports[`EmptyColumn component Renders correctly it renders Default EmptyColumn 
   />
   <Text
     color="#747d8c"
-    fontFamily="Catamaran-Medium"
+    fontFamily=""
     fontSize={16}
     style={
       Array [
         Object {
           "color": "#747d8c",
-          "fontFamily": "Catamaran-Medium",
           "fontSize": 16,
         },
       ]

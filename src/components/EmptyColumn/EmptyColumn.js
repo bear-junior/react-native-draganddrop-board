@@ -37,7 +37,7 @@ EmptyColumn.defaultProps = {
   emptyIconColor: colors.blurple,
   emptyText: 'No items',
   emptyTextColor: colors.bay,
-  emptyTextFontFamily: fonts.Text,
+  emptyTextFontFamily: '',
   emptyTextFontSize: 16
 }
 

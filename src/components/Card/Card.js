@@ -93,11 +93,11 @@ Card.defaultProps = {
   cardBorderRadius: 10,
   cardDescriptionTextColor: colors.bay,
   cardDescriptionFontSize: 14,
-  cardDescriptionFontFamily: fonts.TextLight,
+  cardDescriptionFontFamily: '',
   cardIconColor: colors.blurple,
   cardNameTextColor: colors.blurple,
   cardNameFontSize: 18,
-  cardNameFontFamily: fonts.Text,
+  cardNameFontFamily: '',
   isCardWithShadow: true
 }
 

@@ -4,8 +4,7 @@
   "description": "Drag and drop elements inside carousel",
   "main": "src/components/index.js",
   "scripts": {
-    "test": "jest --config=\"./jest/config.json\"",
-    "postinstall": "react-native link"
+    "test": "jest --config=\"./jest/config.json\""
   },
   "repository": {
     "type": "git",
