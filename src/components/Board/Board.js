@@ -42,12 +42,7 @@ class Board extends React.Component {
     this.varticalOffset = 0
 
     this.panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: () => this.state.movingMode,
-      onMoveShouldSetPanResponder: (evt, gestureState) => (ios ? this.state.movingMode
-        : (Math.abs(gestureState.dx) > 2 || Math.abs(gestureState.dy) > 2)),
-      onMoveShouldSetPanResponderCapture: (evt, gestureState) => (ios ? this.state.movingMode
-        : (Math.abs(gestureState.dx) > 2 || Math.abs(gestureState.dy) > 2)),
-      onPanResponderTerminationRequest: () => !this.state.movingMode,
+      onMoveShouldSetPanResponder: () => this.state.movingMode,
       onPanResponderMove: this.onPanResponderMove,
       onPanResponderRelease: this.onPanResponderRelease,
       onPanResponderTerminate: this.onPanResponderRelease
