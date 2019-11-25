@@ -1,1 +1,5 @@
-module.exports = { assets: ['./src/assets/fonts'] }
+ module.exports = {
+    dependency: {
+        assets: ['./src/assets/fonts'],
+    },
+}

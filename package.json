@@ -50,5 +50,6 @@
   "bugs": {
     "url": "https://github.com/bear-junior/react-native-draganddrop-board/issues"
   },
-  "homepage": "https://github.com/bear-junior/react-native-draganddrop-board#readme"
+  "homepage": "https://github.com/bear-junior/react-native-draganddrop-board#readme",
+  "readmeFilename": "README.md"
 }
