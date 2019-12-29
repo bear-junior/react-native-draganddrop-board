@@ -24,7 +24,7 @@ import { BoardWrapper } from './Board.styled'
 const MAX_RANGE = 100
 const MAX_DEG = 30
 const CARD_WIDTH = 0.78 * deviceWidth
-const SEARCHBAR_HEIGHT = ios ? (isX() ? 44 : 20) : StatusBar.currentHeight
+const STATUSBAR_HEIGHT = ios ? (isX() ? 44 : 20) : StatusBar.currentHeight
 
 class Board extends React.Component {
   constructor(props) {
@@ -226,7 +226,7 @@ class Board extends React.Component {
           draggedItem: item,
           srcColumnId: item.columnId(),
           startingX: x,
-          startingY: dy - boardPositionY - SEARCHBAR_HEIGHT - (ios ? 0 : (dy - y))
+          startingY: dy - boardPositionY - STATUSBAR_HEIGHT - (ios ? 0 : (dy - y))
         })
         this.rotate(MAX_DEG)
       }
