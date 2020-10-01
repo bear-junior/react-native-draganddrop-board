@@ -75,7 +75,10 @@ class Board extends React.Component {
 
       Animated.event([
         null, { dx: pan.x, dy: pan.y }
-      ])(event, gesture)
+      ], {
+        listener: null,
+        useNativeDriver: false,
+      })(event, gesture)
       if (startingX + gesture.dx < -50 && gesture.vx < 0) {
         this.carousel.snapToPrev()
       }
