@@ -92,7 +92,7 @@ import { Board } from 'react-native-draganddrop-board'
 
   <Board
     boardRepository={boardRepository}
-    open={() => {}
+    open={() => {}}
     onDragEnd={() => {}}
   />
 ```
@@ -107,6 +107,11 @@ import { Board } from 'react-native-draganddrop-board'
 | onDragEnd | `function` | yes | function invoked when drag is finished, returns srcColumnId, destColumnId, draggedItem |
 
 All props from Board, Card, Column and Empty components should be added to `<Board />`
+
+# Data update
+Data can be changed within our predefined class 'boardRepository'.
+'boardRepository.updateData(data)'
+That way we won't have to rerender the Board and class objects.
 
 # Card component
 
@@ -139,7 +144,7 @@ import { Board } from 'react-native-draganddrop-board'
 
   <Board
     boardRepository={boardRepository}
-    open={() => {}
+    open={() => {}}
     onDragEnd={() => {}}
     cardContent={(item) => (<View><Text>{item.name}</Text></View>)}
   />

@@ -10,7 +10,10 @@ class BoardRepository {
     this.mover = new Mover(this.positionCalculator)
     this.listeners = {}
   }
-
+  updateData(data) {
+    this.registry.updateData(data);
+    this.updateColumnsLayoutAfterVisibilityChanged();
+  }
   columns = () => this.registry.columns();
 
   column = columnId => this.registry.column(columnId);
@@ -84,8 +87,10 @@ class BoardRepository {
     return column && column.measureAndSaveLayout()
   };
 
-  scrollingPosition = (columnAtPosition, x, y, columnId) =>
+  scrollingPosition = (columnAtPosition, x, y, columnId) => {
     this.positionCalculator.scrollingPosition(columnAtPosition, x, y, columnId);
+  }
+
 
   updateColumnsLayoutAfterVisibilityChanged = () => {
     const columns = this.columns()
@@ -114,8 +119,9 @@ class BoardRepository {
     })
   };
 
-  move = (draggedItem, x, y, columnId) =>
+  move = (draggedItem, x, y, columnId) => {
     this.mover.move(this, this.registry, draggedItem, x, y, columnId);
+  }
 }
 
 export default BoardRepository
