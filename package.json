@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.15",
-    "react-native-draganddrop-board": "https://github.com/bear-junior/react-native-draganddrop-board",
+    "react-native-draganddrop-board": "https://github.com/xgenem/react-native-draganddrop-board/#5dd4c524cf39d8af1f556e5e7985c6e8acd6e6b5",
     "react-timeout": "^1.2.0",
     "styled-components": "^4.4.1",
     "styled-system": "^5.1.5"
