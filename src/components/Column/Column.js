@@ -23,7 +23,7 @@ import {
   SumWrapper
 } from './Column.styled'
 
-const COLUMN_WIDTH = 0.78 * deviceWidth
+const COLUMN_WIDTH = 0.85 * deviceWidth
 const PADDING = 32
 const ONE_COLUMN_WIDTH = deviceWidth - PADDING
 
