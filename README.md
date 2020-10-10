@@ -1,5 +1,6 @@
 <div align="center">
   <image align="center" src="./src/assets/images/header.png"/>
+  <image align="center" src="https://d25lcipzij17d.cloudfront.net/badge.svg?id=js&type=6&v=1.0.4&x2=0"/>
 </div>
 
 # Introduction 
