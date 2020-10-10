@@ -6,7 +6,7 @@ import {
   func,
   number
 } from 'prop-types'
-import { deviceWidth, ios }  from '../../constants'
+import { deviceWidth, ios } from '../../constants'
 import { ItemWrapper } from './Carousel.styled'
 
 const INITIAL_ACTIVE_ITEM = 0
@@ -40,306 +40,306 @@ class Carousel extends Component {
     this.mounted = false
   }
 
-    getCustomDataLength = (props = this.props) => {
-      const { data } = props
-      const dataLength = data && data.length
+  getCustomDataLength = (props = this.props) => {
+    const { data } = props
+    const dataLength = data && data.length
 
-      if (!dataLength) {
-        return 0
-      }
-
-      return dataLength
-    }
-
-    getCustomIndex = (index, props = this.props) => {
-      const itemsLength = this.getCustomDataLength(props)
-
-      if (!itemsLength || (!index && index !== 0)) {
-        return 0
-      }
-
-      return index
-    }
-
-    get currentIndex() {
-      return this.activeItem
-    }
-
-    getDataIndex = (index) => {
-      const { data } = this.props
-      const dataLength = data && data.length
-
-      if (!dataLength) {
-        return index
-      }
-
-      if (index >= dataLength + 1) {
-        return dataLength < 1
-          ? (index - 1) % dataLength
-          : index - dataLength - 1
-      } if (index < 1) {
-        return index + dataLength - 1
-      }
-
-      return index - 1
-    }
-
-    getFirstItem = (index, props = this.props) => {
-      const itemsLength = this.getCustomDataLength(props)
-
-      if (!itemsLength || index > itemsLength - 1 || index < 0) {
-        return 0
-      }
-
-      return index
-    }
-
-    getWrappedRef = () => this.carouselRef
-
-    getKeyExtractor = (item, index) => `scrollview-item-${index}`
-
-    getScrollOffset = event => (event && event.nativeEvent && event.nativeEvent.contentOffset
-            && event.nativeEvent.contentOffset.x) || 0
-
-    getCenter = (offset) => {
-      const {
-        itemWidth,
-        sliderWidth
-      } = this.props
-
-      return offset + sliderWidth / 2 - (sliderWidth - itemWidth) / 2
-    }
-
-    getActiveItem = (offset) => {
-      const center = this.getCenter(offset)
-      const centerOffset = 20
-
-      for (let i = 0; i < this.positions.length; i += 1) {
-        const { start, end } = this.positions[i]
-        if (center + centerOffset >= start && center - centerOffset <= end) {
-          return i
-        }
-      }
-
-      const lastIndex = this.positions.length - 1
-      if (this.positions[lastIndex] && center - centerOffset > this.positions[lastIndex].end) {
-        return lastIndex
-      }
-
+    if (!dataLength) {
       return 0
     }
 
-    initPositions = (props = this.props) => {
-      const {
-        data,
-        itemWidth
-      } = props
+    return dataLength
+  }
 
-      if (!data || !data.length) {
-        return
-      }
+  getCustomIndex = (index, props = this.props) => {
+    const itemsLength = this.getCustomDataLength(props)
 
-      this.positions = []
-
-      const firstItemMargin = 0
-      data.forEach((itemData, index) => {
-        this.positions[index] = {
-          start: firstItemMargin + index * itemWidth + (index * 8),
-          end: index * itemWidth + itemWidth + (index * 8)
-        }
-      })
+    if (!itemsLength || (!index && index !== 0)) {
+      return 0
     }
 
-    scrollTo = (offset) => {
-      const wrappedRef = this.getWrappedRef()
+    return index
+  }
 
-      wrappedRef.scrollTo({ x: offset, y: 0, animated: true })
+  get currentIndex() {
+    return this.activeItem
+  }
+
+  getDataIndex = (index) => {
+    const { data } = this.props
+    const dataLength = data && data.length
+
+    if (!dataLength) {
+      return index
     }
 
-    onScroll = (event) => {
-      const { onScroll } = this.props
-      const scrollOffset = this.getScrollOffset(event)
-      const nextActiveItem = this.getActiveItem(scrollOffset)
-
-      const itemReached = nextActiveItem === this.itemToSnapTo
-      const scrollConditions = scrollOffset >= this.scrollOffsetRef
-            && scrollOffset <= this.scrollOffsetRef
-
-      this.currentContentOffset = scrollOffset
-
-      if (this.activeItem !== nextActiveItem && itemReached) {
-        if (scrollConditions) {
-          this.activeItem = nextActiveItem
-        }
-      }
-
-      return onScroll && onScroll()
+    if (index >= dataLength + 1) {
+      return dataLength < 1
+        ? (index - 1) % dataLength
+        : index - dataLength - 1
+    } if (index < 1) {
+      return index + dataLength - 1
     }
 
-    onScrollBeginDrag = (event) => {
-      this.scrollStartOffset = this.getScrollOffset(event)
-      this.scrollStartActive = this.getActiveItem(this.scrollStartOffset)
+    return index - 1
+  }
+
+  getFirstItem = (index, props = this.props) => {
+    const itemsLength = this.getCustomDataLength(props)
+
+    if (!itemsLength || index > itemsLength - 1 || index < 0) {
+      return 0
     }
 
-    onScrollEndDrag = (event) => {
-      const { onScrollEndDrag } = this.props
+    return index
+  }
 
-      if (this.carouselRef) {
-        return this.onScrollEnd && this.onScrollEnd(event)
-      }
+  getWrappedRef = () => this.carouselRef
 
-      return onScrollEndDrag()
-    }
+  getKeyExtractor = (item, index) => `scrollview-item-${index}`
 
-    onScrollEnd = () => {
-      this.scrollEndOffset = this.currentContentOffset
-      this.scrollEndActive = this.getActiveItem(this.scrollEndOffset)
+  getScrollOffset = event => (event && event.nativeEvent && event.nativeEvent.contentOffset
+    && event.nativeEvent.contentOffset.x) || 0
 
-      this.snapScroll(this.scrollEndOffset - this.scrollStartOffset)
-    }
+  getCenter = (offset) => {
+    const {
+      itemWidth,
+      sliderWidth
+    } = this.props
 
-    onLayout = () => {
-      if (this.onLayoutInitDone) {
-        this.initPositions()
-        this.snapToItem(this.activeItem)
-      } else {
-        this.onLayoutInitDone = true
+    return offset + sliderWidth / 2 - (sliderWidth - itemWidth) / 2
+  }
+
+  getActiveItem = (offset) => {
+    const center = this.getCenter(offset)
+    const centerOffset = 20
+
+    for (let i = 0; i < this.positions.length; i += 1) {
+      const { start, end } = this.positions[i]
+      if (center + centerOffset >= start && center - centerOffset <= end) {
+        return i
       }
     }
 
-    snapScroll = (delta) => {
-      if (!this.scrollEndActive && this.scrollEndActive !== 0 && ios) {
-        this.scrollEndActive = this.scrollStartActive
-      }
+    const lastIndex = this.positions.length - 1
+    if (this.positions[lastIndex] && center - centerOffset > this.positions[lastIndex].end) {
+      return lastIndex
+    }
 
-      if (this.scrollStartActive !== this.scrollEndActive) {
-        this.snapToItem(this.scrollEndActive)
-      } else if (delta > 0) {
-        this.snapToItem(this.scrollStartActive + 1)
-      } else if (delta < 0) {
-        this.snapToItem(this.scrollStartActive - 1)
-      } else {
-        this.snapToItem(this.scrollEndActive)
+    return 0
+  }
+
+  initPositions = (props = this.props) => {
+    const {
+      data,
+      itemWidth
+    } = props
+
+    if (!data || !data.length) {
+      return
+    }
+
+    this.positions = []
+
+    const firstItemMargin = 0
+    data.forEach((itemData, index) => {
+      this.positions[index] = {
+        start: firstItemMargin + index * itemWidth + (index * 8),
+        end: index * itemWidth + itemWidth + (index * 8)
+      }
+    })
+  }
+
+  scrollTo = (offset) => {
+    const wrappedRef = this.getWrappedRef()
+
+    wrappedRef.scrollTo({ x: offset, y: 0, animated: true })
+  }
+
+  onScroll = (event) => {
+    const { onScroll } = this.props
+    const scrollOffset = this.getScrollOffset(event)
+    const nextActiveItem = this.getActiveItem(scrollOffset)
+
+    const itemReached = nextActiveItem === this.itemToSnapTo
+    const scrollConditions = scrollOffset >= this.scrollOffsetRef
+      && scrollOffset <= this.scrollOffsetRef
+
+    this.currentContentOffset = scrollOffset
+
+    if (this.activeItem !== nextActiveItem && itemReached) {
+      if (scrollConditions) {
+        this.activeItem = nextActiveItem
       }
     }
 
-    snapToItem = (index) => {
-      const { itemWidth } = this.props
-      this.activeItem = index
+    return onScroll && onScroll()
+  }
 
-      if (index !== this.previousActiveItem) {
-        this.previousActiveItem = index
-      }
+  onScrollBeginDrag = (event) => {
+    this.scrollStartOffset = this.getScrollOffset(event)
+    this.scrollStartActive = this.getActiveItem(this.scrollStartOffset)
+  }
 
-      this.itemToSnapTo = index
-      this.scrollOffsetRef = this.positions[index]
+  onScrollEndDrag = (event) => {
+    const { onScrollEndDrag } = this.props
+
+    if (this.carouselRef) {
+      return this.onScrollEnd && this.onScrollEnd(event)
+    }
+
+    return onScrollEndDrag()
+  }
+
+  onScrollEnd = () => {
+    this.scrollEndOffset = this.currentContentOffset
+    this.scrollEndActive = this.getActiveItem(this.scrollEndOffset)
+
+    this.snapScroll(this.scrollEndOffset - this.scrollStartOffset)
+  }
+
+  onLayout = () => {
+    if (this.onLayoutInitDone) {
+      this.initPositions()
+      this.snapToItem(this.activeItem)
+    } else {
+      this.onLayoutInitDone = true
+    }
+  }
+
+  snapScroll = (delta) => {
+    if (!this.scrollEndActive && this.scrollEndActive !== 0 && ios) {
+      this.scrollEndActive = this.scrollStartActive
+    }
+
+    if (this.scrollStartActive !== this.scrollEndActive) {
+      this.snapToItem(this.scrollEndActive)
+    } else if (delta > 0) {
+      this.snapToItem(this.scrollStartActive + 1)
+    } else if (delta < 0) {
+      this.snapToItem(this.scrollStartActive - 1)
+    } else {
+      this.snapToItem(this.scrollEndActive)
+    }
+  }
+
+  snapToItem = (index) => {
+    const { itemWidth } = this.props
+    this.activeItem = index
+
+    if (index !== this.previousActiveItem) {
+      this.previousActiveItem = index
+    }
+
+    this.itemToSnapTo = index
+    this.scrollOffsetRef = this.positions[index]
       && this.positions[index].start - ((deviceWidth - itemWidth) / 2) + 8
 
-      if (!this.scrollOffsetRef && this.scrollOffsetRef !== 0) {
-        return
-      }
-
-      this.currentContentOffset = this.scrollOffsetRef < 0 ? 0 : this.scrollOffsetRef
-
-      this.scrollTo(this.scrollOffsetRef)
+    if (!this.scrollOffsetRef && this.scrollOffsetRef !== 0) {
+      return
     }
 
-    snapToNext = () => {
-      const { onScrollEndDrag } = this.props
-      const itemsLength = this.getCustomDataLength()
+    this.currentContentOffset = this.scrollOffsetRef < 0 ? 0 : this.scrollOffsetRef
 
-      const newIndex = this.activeItem + 1
-      if (newIndex > itemsLength - 1) {
-        return
-      }
+    this.scrollTo(this.scrollOffsetRef)
+  }
 
-      setTimeout(() => this.snapToItem(newIndex), 500)
-      onScrollEndDrag()
+  snapToNext = () => {
+    const { onScrollEndDrag } = this.props
+    const itemsLength = this.getCustomDataLength()
+
+    const newIndex = this.activeItem + 1
+    if (newIndex > itemsLength - 1) {
+      return
     }
 
-    snapToPrev = () => {
-      const { onScrollEndDrag } = this.props
-      const newIndex = this.activeItem - 1
-      if (newIndex < 0) {
-        return
-      }
-      setTimeout(() => this.snapToItem(newIndex), 500)
-      onScrollEndDrag()
+    setTimeout(() => this.snapToItem(newIndex), 500)
+    onScrollEndDrag()
+  }
+
+  snapToPrev = () => {
+    const { onScrollEndDrag } = this.props
+    const newIndex = this.activeItem - 1
+    if (newIndex < 0) {
+      return
+    }
+    setTimeout(() => this.snapToItem(newIndex), 500)
+    onScrollEndDrag()
+  }
+
+  renderItem = ({ item, index }) => {
+    const { renderItem } = this.props
+
+    const specificProps = {
+      key: this.getKeyExtractor(item, index)
     }
 
-    renderItem = ({ item, index }) => {
-      const { renderItem } = this.props
+    return (
+      <ItemWrapper
+        pointerEvents="box-none"
+        {...specificProps}
+      >
+        { renderItem({ item, index })}
+      </ItemWrapper>
+    )
+  }
 
-      const specificProps = {
-        key: this.getKeyExtractor(item, index)
-      }
+  getComponentStaticProps = () => {
+    const {
+      data,
+      oneColumn,
+      sliderWidth
+    } = this.props
 
-      return (
-        <ItemWrapper
-          pointerEvents="box-none"
-          {...specificProps}
-        >
-          { renderItem({ item, index }) }
-        </ItemWrapper>
-      )
+    const containerStyle = [
+      { width: sliderWidth, flexDirection: 'row' }
+    ]
+    const contentContainerStyle = {
+      paddingLeft: oneColumn ? 16 : 8,
+      paddingTop: 8,
+      paddingBottom: 8
     }
 
-    getComponentStaticProps = () => {
-      const {
-        data,
-        oneColumn,
-        sliderWidth
-      } = this.props
-
-      const containerStyle = [
-        { width: sliderWidth, flexDirection: 'row' }
-      ]
-      const contentContainerStyle = {
-        paddingLeft: oneColumn ? 16 : 8,
-        paddingTop: 8,
-        paddingBottom: 8
-      }
-
-      return {
-        // eslint-disable-next-line no-return-assign
-        ref: c => this.carouselRef = c,
-        data,
-        style: containerStyle,
-        contentContainerStyle,
-        horizontal: true,
-        scrollEventThrottle: 1,
-        onScroll: this.onScroll,
-        onScrollBeginDrag: this.onScrollBeginDrag,
-        onScrollEndDrag: this.onScrollEndDrag,
-        onLayout: this.onLayout
-      }
+    return {
+      // eslint-disable-next-line no-return-assign
+      ref: c => this.carouselRef = c,
+      data,
+      style: containerStyle,
+      contentContainerStyle,
+      horizontal: true,
+      scrollEventThrottle: 1,
+      onScroll: this.onScroll,
+      onScrollBeginDrag: this.onScrollBeginDrag,
+      onScrollEndDrag: this.onScrollEndDrag,
+      onLayout: this.onLayout
     }
+  }
 
-    render() {
-      const props = {
-        decelerationRate: 'fast',
-        showsHorizontalScrollIndicator: false,
-        overScrollMode: 'never',
-        automaticallyAdjustContentInsets: true,
-        directionalLockEnabled: true,
-        pinchGestureEnabled: false,
-        scrollsToTop: false,
-        renderToHardwareTextureAndroid: true,
-        ...this.props,
-        ...this.getComponentStaticProps()
-      }
-      const {
-        data,
-        oneColumn,
-        scrollEnabled
-      } = this.props
-
-      return (
-        <ScrollView {...props} scrollEnabled={scrollEnabled && !oneColumn}>
-          {data.map((item, index) => this.renderItem({ item, index }))}
-        </ScrollView>
-      )
+  render() {
+    const props = {
+      decelerationRate: 'fast',
+      showsHorizontalScrollIndicator: false,
+      overScrollMode: 'never',
+      automaticallyAdjustContentInsets: true,
+      directionalLockEnabled: true,
+      pinchGestureEnabled: false,
+      scrollsToTop: false,
+      renderToHardwareTextureAndroid: true,
+      ...this.props,
+      ...this.getComponentStaticProps()
     }
+    const {
+      data,
+      oneColumn,
+      scrollEnabled
+    } = this.props
+
+    return (
+      <ScrollView {...props} scrollEnabled={scrollEnabled && !oneColumn}>
+        {data.map((item, index) => this.renderItem({ item, index }))}
+      </ScrollView>
+    )
+  }
 }
 
 Carousel.propTypes = {
@@ -354,8 +354,8 @@ Carousel.propTypes = {
 
 Carousel.defaultProps = {
   oneColumn: false,
-  onScroll: () => {},
-  onScrollEndDrag: () => {}
+  onScroll: () => { },
+  onScrollEndDrag: () => { }
 }
 
 export default Carousel

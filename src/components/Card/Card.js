@@ -53,13 +53,14 @@ const Card = ({
       collapsable={false}
     >
       <Animated.View style={styles}>
-        <CardContainer
-          backgroundColor={cardBackground}
-          borderRadius={cardBorderRadius}
-          elevation={isCardWithShadow ? 5 : 0}
-          shadowOpacity={isCardWithShadow ? 0.1 : 0}
-        >
-          {cardContent !== undefined ? cardContent(item ? item.row() : {}) :
+        {cardContent !== undefined ? cardContent(item ? item.row() : {}) :
+
+          <CardContainer
+            backgroundColor={cardBackground}
+            borderRadius={cardBorderRadius}
+            elevation={isCardWithShadow ? 5 : 0}
+            shadowOpacity={isCardWithShadow ? 0.1 : 0}
+          >
             <RowWrapper>
               <IconRowWrapper width={deviceWidth / 2 - 28}>
                 <ColumnWrapper>
@@ -81,8 +82,9 @@ const Card = ({
               </IconRowWrapper>
               <Next color={cardIconColor} />
             </RowWrapper>
-          }
-        </CardContainer>
+          </CardContainer>
+        }
+
       </Animated.View>
     </CardWrapper>
   )

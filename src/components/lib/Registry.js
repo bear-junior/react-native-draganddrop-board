@@ -33,12 +33,14 @@ class Registry {
       existingAttributes.items,
     )
 
-    return new ColumnItem(
+    const colItem = new ColumnItem(
       Object.assign(existingAttributes, {
         items: itemsMap,
         data: columnData
       }),
     )
+    colItem.measureAndSaveLayout()
+    return colItem;
   };
 
   existingItemAttributes = (existingItems, itemId) => {
@@ -52,21 +54,21 @@ class Registry {
       const row = rows[index]
       const { id } = row
       const existingItemAttributes =
-        this.existingItemAttributes(existingItems, id) || {}
-
-      return new Item(
+        this.existingItemAttributes(existingItems, id) || {};
+      const itemDef = new Item(
         Object.assign(existingItemAttributes, {
           id,
           index,
           columnId,
-          row
-        }),
-      )
+          row,
+        }));
+
+      return itemDef;
     })
 
     const itemsMap = {}
-
-    items.forEach(item => {
+    items.forEach((item, index) => {
+      item.measureAndSaveLayout({});
       itemsMap[item.id()] = item
     })
 
@@ -74,6 +76,7 @@ class Registry {
   };
 
   updateData = data => {
+    this.map = {};
     const columns = range(data.length).map(columnIndex => {
       const columnData = data[columnIndex]
 
@@ -95,7 +98,6 @@ class Registry {
 
   columns = () => {
     const columns = values(this.map)
-
     return sortBy(columns, column => column.index())
   };
 
