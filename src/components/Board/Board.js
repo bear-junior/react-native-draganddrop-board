@@ -61,43 +61,46 @@ class Board extends React.Component {
   }
 
   onPanResponderMove = (event, gesture) => {
-    const {
-      draggedItem,
-      movingMode,
-      pan,
-      startingX
-    } = this.state
-    const { boardRepository } = this.props
+    try {
+      const {
+        draggedItem,
+        movingMode,
+        pan,
+        startingX
+      } = this.state
+      const { boardRepository } = this.props
 
-    if (movingMode) {
-      this.x = event.nativeEvent.pageX
-      this.y = event.nativeEvent.pageY
+      if (movingMode) {
+        this.x = event.nativeEvent.pageX
+        this.y = event.nativeEvent.pageY
 
-      Animated.event([
-        null, { dx: pan.x, dy: pan.y }
-      ], {
-        listener: null,
-        useNativeDriver: false,
-      })(event, gesture)
+        Animated.event([
+          null, { dx: pan.x, dy: pan.y }
+        ], {
+          listener: null,
+          useNativeDriver: false,
+        })(event, gesture)
 
-      if (startingX + gesture.dx < -50 && gesture.vx < 0) {
-        this.carousel.snapToPrev()
-      }
-      if (startingX + gesture.dx + CARD_WIDTH - 50 > deviceWidth && gesture.vx > 0) {
-        this.carousel.snapToNext()
-      }
+        if (startingX + gesture.dx < -50 && gesture.vx < 0) {
+          this.carousel.snapToPrev()
+        }
+        if (startingX + gesture.dx + CARD_WIDTH - 50 > deviceWidth && gesture.vx > 0) {
+          this.carousel.snapToNext()
+        }
 
-      const columnId = this.carousel.currentIndex
-      const columnAtPosition = boardRepository
-        .move(draggedItem, this.x, this.y, columnId)
-      if (columnAtPosition) {
-        const { scrolling, offset } = boardRepository
-          .scrollingPosition(columnAtPosition, this.x, this.y, columnId)
-        if (this.shouldScroll(scrolling, offset, columnAtPosition)) {
-          this.scroll(columnAtPosition, draggedItem, offset)
+        const columnId = this.carousel.currentIndex
+        const columnAtPosition = boardRepository.move(draggedItem, this.x, this.y, columnId)
+        if (columnAtPosition) {
+          const { scrolling, offset } = boardRepository.scrollingPosition(columnAtPosition, this.x, this.y, columnId)
+          if (this.shouldScroll(scrolling, offset, columnAtPosition)) {
+            this.scroll(columnAtPosition, draggedItem, offset)
+          }
         }
       }
+    } catch (error) {
+      console.log("columnAtPosition", error)
     }
+
   }
 
   shouldScroll = (scrolling, offset, column) => {
@@ -137,18 +140,29 @@ class Board extends React.Component {
   }
 
   endMoving = () => {
-    this.setState({ movingMode: false })
-    const { draggedItem, pan, srcColumnId } = this.state
-    const { boardRepository, onDragEnd } = this.props
+    try {
+      this.setState({ movingMode: false })
+      const { draggedItem, pan, srcColumnId } = this.state
+      const { boardRepository, onDragEnd } = this.props
 
-    boardRepository.show(draggedItem.columnId(), draggedItem)
-    boardRepository.notify(draggedItem.columnId(), 'reload')
+      boardRepository.show(draggedItem.columnId(), draggedItem)
+      boardRepository.notify(draggedItem.columnId(), 'reload')
 
-    const destColumnId = draggedItem.columnId()
-    pan.setValue({ x: 0, y: 0 })
-    this.setState({ startingX: 0, startingY: 0 })
+      const destColumnId = draggedItem.columnId()
+      pan.setValue({ x: 0, y: 0 })
+      this.setState({ startingX: 0, startingY: 0 })
 
-    return onDragEnd && onDragEnd(srcColumnId, destColumnId, draggedItem)
+      return onDragEnd && onDragEnd(srcColumnId, destColumnId, draggedItem)
+
+    } catch (error) {
+      const { draggedItem, srcColumnId } = this.state
+      const { onDragEnd } = this.props
+      const destColumnId = draggedItem.columnId()
+      this.setState({ movingMode: false,startingX: 0, startingY: 0 })
+      console.log("endMoving", error)
+      return onDragEnd && onDragEnd(srcColumnId, destColumnId, draggedItem)
+
+    }
   }
 
   onPanResponderRelease = () => {
@@ -292,9 +306,11 @@ class Board extends React.Component {
   movingTask = () => {
     const { draggedItem, movingMode } = this.state
     const zIndex = movingMode ? 1 : -1
-    const data = { item: draggedItem,
+    const data = {
+      item: draggedItem,
       hidden: !movingMode,
-      style: this.movingStyle(zIndex) }
+      style: this.movingStyle(zIndex)
+    }
 
     return this.renderWrapperRow(data)
   }
