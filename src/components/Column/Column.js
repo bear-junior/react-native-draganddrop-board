@@ -179,7 +179,8 @@ class Column extends React.Component {
       isWithCountBadge,
       oneColumn,
       movingMode,
-      boardRepository
+      boardRepository,
+      columnWidth
     } = this.props
 
     const colElements = boardRepository.items(column.id()).length - 1
