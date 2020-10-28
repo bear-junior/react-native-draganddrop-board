@@ -193,7 +193,7 @@ class Column extends React.Component {
         collapsable={false}
         onLayout={this.updateColumnWithLayout}
         columnHeight={columnHeight}
-        width={oneColumn ? ONE_COLUMN_WIDTH : COLUMN_WIDTH}
+        width={oneColumn ? ONE_COLUMN_WIDTH : columnWidth?columnWidth:COLUMN_WIDTH}
         marginRight={oneColumn ? 0 : 8}
       >
         <RowContainer>
