@@ -86,6 +86,7 @@ class Board extends React.Component {
         this.carousel.snapToNext()
       }
 
+
       const columnId = this.carousel.currentIndex
       const columnAtPosition = boardRepository
         .move(draggedItem, this.x, this.y, columnId)
@@ -139,15 +140,12 @@ class Board extends React.Component {
     this.setState({ movingMode: false })
     const { draggedItem, pan, srcColumnId } = this.state
     const { boardRepository, onDragEnd } = this.props
-
     boardRepository.show(draggedItem.columnId(), draggedItem)
     boardRepository.notify(draggedItem.columnId(), 'reload')
-
     const destColumnId = draggedItem.columnId()
     pan.setValue({ x: 0, y: 0 })
     this.setState({ startingX: 0, startingY: 0 })
-
-    return onDragEnd && onDragEnd(srcColumnId, destColumnId, draggedItem)
+    return onDragEnd && onDragEnd(boardRepository.columns()[srcColumnId - 1], boardRepository.columns()[destColumnId - 1], draggedItem)
   }
 
   onPanResponderRelease = () => {
