@@ -29,8 +29,8 @@ const STATUSBAR_HEIGHT = ios ? (isX() ? 44 : 20) : StatusBar.currentHeight
 class Board extends React.Component {
   constructor(props) {
     super(props)
-    
-    CARD_WIDTH = this.props.columnWidth 
+
+    CARD_WIDTH = this.props.columnWidth
 
     this.state = {
       boardPositionY: 0,
@@ -89,7 +89,7 @@ class Board extends React.Component {
         if (startingX + gesture.dx + CARD_WIDTH - 50 > deviceWidth && gesture.vx > 0) {
           this.carousel.snapToNext()
         }
-        
+
         const columnId = this.carousel.currentIndex
         const columnAtPosition = boardRepository.move(draggedItem, this.x, this.y, columnId)
         if (columnAtPosition) {
@@ -154,15 +154,15 @@ class Board extends React.Component {
       pan.setValue({ x: 0, y: 0 })
       this.setState({ startingX: 0, startingY: 0 })
 
-      return onDragEnd && onDragEnd(srcColumnId, destColumnId, draggedItem)
+      return onDragEnd && onDragEnd(boardRepository.columns()[srcColumnId - 1], boardRepository.columns()[destColumnId - 1], draggedItem)
 
     } catch (error) {
       const { draggedItem, srcColumnId } = this.state
       const { onDragEnd } = this.props
       const destColumnId = draggedItem.columnId()
-      this.setState({ movingMode: false,startingX: 0, startingY: 0 })
+      this.setState({ movingMode: false, startingX: 0, startingY: 0 })
       console.log("endMoving", error)
-      return onDragEnd && onDragEnd(srcColumnId, destColumnId, draggedItem)
+      return onDragEnd && onDragEnd(boardRepository.columns()[srcColumnId - 1], boardRepository.columns()[destColumnId - 1], draggedItem)
 
     }
   }

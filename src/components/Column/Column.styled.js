@@ -25,6 +25,8 @@ const RowContainer = styled.View`
   alignItems: center;
   paddingVertical: 18;
   paddingHorizontal: 10;
+  justifyContent:center;
+
 `
 
 const Paragraph = styled.Text`
