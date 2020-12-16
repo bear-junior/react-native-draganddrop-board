@@ -10,19 +10,23 @@ class PositionCalculator {
   }
 
   scrollingPosition = (column, x, y) => {
+
     const layout = column.layout()
+    if (layout !== undefined) {
+      const upperEnd = layout.y
+      const upper = y > upperEnd - this.TRESHOLD && y < upperEnd + this.TRESHOLD
 
-    const upperEnd = layout.y
-    const upper = y > upperEnd - this.TRESHOLD && y < upperEnd + this.TRESHOLD
+      const lowerEnd = layout.y + layout.height
+      const lower = y > lowerEnd - this.TRESHOLD && y < lowerEnd + this.TRESHOLD
 
-    const lowerEnd = layout.y + layout.height
-    const lower = y > lowerEnd - this.TRESHOLD && y < lowerEnd + this.TRESHOLD
+      const offset = lower ? 1 : (upper ? -1 : 0)
 
-    const offset = lower ? 1 : (upper ? -1 : 0)
-
-    return {
-      offset,
-      scrolling: (lower || upper)
+      return {
+        offset,
+        scrolling: (lower || upper)
+      }
+    }else {
+      console.log("scrollingPosition", layout)
     }
   }
 

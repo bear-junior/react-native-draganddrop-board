@@ -7,6 +7,7 @@ class Mover {
   }
 
   move = (boardRepository, registry, draggedItem, x, y, columnId) => {
+   try {
     const fromColumnId = draggedItem.columnId()
     const columns = boardRepository.columns()
     const columnAtPosition = this.positionCalculator.columnAtPosition(columns, columnId)
@@ -37,10 +38,15 @@ class Mover {
     this.switchItemsBetween(boardRepository, draggedItem, itemAtPosition, toColumnId)
 
     return columnAtPosition
+     
+   } catch (error) {
+     console.log("move ",error)
+   }
   }
 
   moveToOtherColumn = (boardRepository, registry, fromColumnId, toColumnId, item) => {
     registry.move(fromColumnId, toColumnId, item)
+
     boardRepository.notify(fromColumnId, 'reload')
 
     item.setVisible(true)

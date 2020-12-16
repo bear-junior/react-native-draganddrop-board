@@ -23,7 +23,7 @@ import {
   SumWrapper
 } from './Column.styled'
 
-const COLUMN_WIDTH = 0.78 * deviceWidth
+const COLUMN_WIDTH = 0.85 * deviceWidth
 const PADDING = 32
 const ONE_COLUMN_WIDTH = deviceWidth - PADDING
 
@@ -177,7 +177,8 @@ class Column extends React.Component {
       isWithCountBadge,
       oneColumn,
       movingMode,
-      boardRepository
+      boardRepository,
+      columnWidth
     } = this.props
 
     const colElements = boardRepository.items(column.id()).length - 1
@@ -190,7 +191,7 @@ class Column extends React.Component {
         collapsable={false}
         onLayout={this.updateColumnWithLayout}
         columnHeight={columnHeight}
-        width={oneColumn ? ONE_COLUMN_WIDTH : COLUMN_WIDTH}
+        width={oneColumn ? ONE_COLUMN_WIDTH : columnWidth?columnWidth:COLUMN_WIDTH}
         marginRight={oneColumn ? 0 : 8}
       >
         <RowContainer>
