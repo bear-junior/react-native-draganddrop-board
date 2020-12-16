@@ -48,16 +48,11 @@ class Item {
   )
 
   measureAndSaveLayout = (previousItem) => {
-    const ref = this.ref()
-
+    const ref = this.attributes.ref
     const measure = ref && ref.measure((fx, fy, width, height, px, py) => {
       const layout = { x: px, y: py, width, height }
       this.setLayout(layout)
-      if (!this.isVisible() &&
-          (layout.x || layout.x === 0) &&
-          (layout.y || layout.y === 0) &&
-          (layout.width || layout.width === 0) &&
-          (layout.height || layout.height === 0)) {
+      if (!this.isVisible() && layout.x && layout.y && layout.width && layout.height) {
         this.setVisible(true)
       } else if (this.isVisible() && !layout.x && !layout.y && !layout.width && !layout.height) {
         this.setVisible(false)

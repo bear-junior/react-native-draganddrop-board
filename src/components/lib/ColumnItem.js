@@ -25,7 +25,7 @@ class ColumnItem {
       columnId: this.id(),
       row: { id: -2, name: '' },
       hidden: true,
-      locked: true,
+      locked: false,
       visible: false
     })
 
@@ -70,9 +70,11 @@ class ColumnItem {
 
   measureAndSaveLayout = () => {
     const ref = this.ref()
+
     const measure = ref && ref.measure((ox, oy, width, height, px, py) => {
       const layout = { x: px, y: py, width, height }
       this.setLayout(layout)
+
     })
 
     return measure

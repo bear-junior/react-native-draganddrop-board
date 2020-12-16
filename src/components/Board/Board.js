@@ -87,7 +87,7 @@ class Board extends React.Component {
         if (startingX + gesture.dx + CARD_WIDTH - 50 > deviceWidth && gesture.vx > 0) {
           this.carousel.snapToNext()
         }
-
+        
         const columnId = this.carousel.currentIndex
         const columnAtPosition = boardRepository.move(draggedItem, this.x, this.y, columnId)
         if (columnAtPosition) {
@@ -213,14 +213,12 @@ class Board extends React.Component {
 
     if (!item || (item.isLocked() && this.scrolling)) {
       this.unsubscribeFromMovingMode()
-
       return
     }
     this.movingSubscription = setTimeout(() => {
       if (!item || !item.layout()) {
         return
       }
-
       const lastColumn = boardRepository.columns().length - 1
       const columnIndex = this.carousel.currentIndex
 
@@ -233,7 +231,6 @@ class Board extends React.Component {
       } else if (columnIndex === lastColumn) {
         x = deviceWidth - (0.78 * deviceWidth)
       }
-
       const { y } = item.layout()
 
       if (columnId - 1 === columnIndex) {
@@ -335,43 +332,46 @@ class Board extends React.Component {
     const { movingMode } = this.state
     const {
       boardBackground,
-      boardRepository
+      boardRepository,
+      data
     } = this.props
 
     return (
       <BoardWrapper
-        {...this.panResponder.panHandlers}
-        onLayout={(evt) => this.setBoardPositionY(evt.nativeEvent.layout.y)}
-        backgroundColor={boardBackground}
-      >
-        <Carousel
-          ref={(c) => { this.carousel = c }}
-          data={boardRepository.columns()}
-          onScrollEndDrag={this.onScrollEnd}
-          onScroll={this.cancelMovingSubscription}
-          scrollEnabled={!movingMode}
-          renderItem={item => (
-            <Column
-              {...this.props}
-              key={item.item.data().id.toString()}
-              column={item.item}
-              movingMode={movingMode}
-              boardRepository={boardRepository}
-              onPressIn={this.onPressIn}
-              onPress={this.onPress}
-              renderWrapperRow={this.renderWrapperRow}
-              onScrollingStarted={this.onScrollingStarted}
-              onScrollingEnded={this.onScrollingEnded}
-              unsubscribeFromMovingMode={this.cancelMovingSubscription}
-              oneColumn={boardRepository.columns().length === 1}
-            />
-          )}
-          sliderWidth={deviceWidth}
-          itemWidth={CARD_WIDTH}
-          oneColumn={boardRepository.columns().length === 1}
-        />
+        {...this.panResponder.panHandlers}>
+        <BoardWrapper
+          onLayout={(evt) => this.setBoardPositionY(evt.nativeEvent.layout.y)}
+          backgroundColor={boardBackground}
+        >
+          <Carousel
+            ref={(c) => { this.carousel = c }}
+            data={boardRepository.columns()}
+            onScrollEndDrag={this.onScrollEnd}
+            onScroll={this.cancelMovingSubscription}
+            scrollEnabled={!movingMode}
+            renderItem={item => (
+              <Column
+                {...this.props}
+                key={item.item.data().id.toString()}
+                column={item.item}
+                movingMode={movingMode}
+                boardRepository={boardRepository}
+                onPressIn={this.onPressIn}
+                onPress={this.onPress}
+                renderWrapperRow={this.renderWrapperRow}
+                onScrollingStarted={this.onScrollingStarted}
+                onScrollingEnded={this.onScrollingEnded}
+                unsubscribeFromMovingMode={this.cancelMovingSubscription}
+                oneColumn={boardRepository.columns().length === 1}
+              />
+            )}
+            sliderWidth={deviceWidth}
+            itemWidth={CARD_WIDTH}
+            oneColumn={boardRepository.columns().length === 1}
+          />
 
-        {this.movingTask()}
+          {this.movingTask()}
+        </BoardWrapper >
       </BoardWrapper>
     )
   }

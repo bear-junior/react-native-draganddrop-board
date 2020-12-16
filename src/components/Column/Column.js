@@ -40,7 +40,6 @@ class Column extends React.Component {
 
   onPressIn = (item, y) => {
     const { column, onPressIn } = this.props
-
     onPressIn(column.id(), item, y)
   }
 
@@ -52,8 +51,8 @@ class Column extends React.Component {
 
   setItemRef = (item, ref) => {
     const { column, boardRepository } = this.props
-
     boardRepository.setItemRef(column.id(), item, ref)
+    boardRepository.updateColumnsLayoutAfterVisibilityChanged();
   }
 
   updateItemWithLayout = item => () => {
@@ -63,7 +62,6 @@ class Column extends React.Component {
 
   setColumnRef = (ref) => {
     const { column, boardRepository } = this.props
-
     boardRepository.setColumnRef(column.id(), ref)
   }
 
@@ -75,14 +73,12 @@ class Column extends React.Component {
 
   renderWrapperRow = (item) => {
     const { renderWrapperRow } = this.props
-
     const props = {
       onPressIn: (y) => this.onPressIn(item, y),
       onPress: this.onPress(item),
       hidden: item.isHidden(),
       item
     }
-
     return (
       <RowWrapper
         ref={ref => this.setItemRef(item, ref)}
@@ -107,7 +103,9 @@ class Column extends React.Component {
     onScrollingStarted()
 
     const col = boardRepository.column(column.id())
+
     const liveOffset = event.nativeEvent.contentOffset.y
+
     this.scrollingDown = liveOffset > col.scrollOffset()
   }
 

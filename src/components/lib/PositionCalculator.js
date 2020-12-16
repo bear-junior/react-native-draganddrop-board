@@ -1,5 +1,5 @@
 class PositionCalculator {
-  TRESHOLD = 35
+  TRESHOLD = 100
 
   columnAtPosition = (columns, columnId) => {
     const column = columns.find((col, index) => (
