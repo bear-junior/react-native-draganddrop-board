@@ -105,7 +105,7 @@ import { Board } from 'react-native-draganddrop-board'
 | boardRepository | `BoardRepository` | yes | object that holds data |
 | boardBackground | `string` | no | board background color |
 | open | `function` | yes | function invoked when item is pressed, returns item |
-| onDragEnd | `function` | yes | function invoked when drag is finished, returns srcColumn, destColumn, draggedItem |
+| onDragEnd | `function` | yes | function invoked when drag is finished, returns srcColumn, destColumn, draggedItem object|
 
 All props from Board, Card, Column and Empty components should be added to `<Board />`
 
