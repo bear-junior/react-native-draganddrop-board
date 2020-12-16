@@ -23,12 +23,14 @@ import { BoardWrapper } from './Board.styled'
 
 const MAX_RANGE = 100
 const MAX_DEG = 30
-const CARD_WIDTH = 0.85 * deviceWidth
+let CARD_WIDTH = 0.85 * deviceWidth
 const STATUSBAR_HEIGHT = ios ? (isX() ? 44 : 20) : StatusBar.currentHeight
 
 class Board extends React.Component {
   constructor(props) {
     super(props)
+    
+    CARD_WIDTH = this.props.columnWidth 
 
     this.state = {
       boardPositionY: 0,
