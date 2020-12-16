@@ -117,7 +117,7 @@ That way we won't have to rerender the Board and class objects.
 # Card component
 
 If you want to use default Card you should build your boardRepository with rows that have elements `id`, `name`and `description`:
-
+Pay attention, the `id` is unique. (Rows, column)
 ```
   {
      id: '1',
