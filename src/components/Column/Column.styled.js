@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components/native'
 import {
   borderRadius,
   color,
@@ -11,6 +11,7 @@ import {
 const ColumnWrapper = styled.View`
   paddingHorizontal: 8;
   ${borderRadius};
+  maxWidth: 400;
   ${marginRight};
   ${props => `height: ${props.columnHeight}`}
 `
