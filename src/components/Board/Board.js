@@ -30,8 +30,9 @@ class Board extends React.Component {
   constructor(props) {
     super(props)
 
-    CARD_WIDTH = this.props.columnWidth
-
+    if (this.props.columnWidth) {
+      CARD_WIDTH = this.props.columnWidth;
+    }
     this.state = {
       boardPositionY: 0,
       rotate: new Animated.Value(0),
