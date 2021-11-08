@@ -26,6 +26,11 @@ const data = [
   {
     id: 1,
     name: 'TO DO',
+    header: (
+      <View>
+        <Text>Custom header component</Text>
+      </View>
+    ),
     rows: [
       {
         id: '1',
