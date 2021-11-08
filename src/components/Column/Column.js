@@ -195,13 +195,15 @@ class Column extends React.Component {
         marginRight={oneColumn ? 0 : 8}
       >
         <RowContainer>
-          <Paragraph
-            fontSize={columnNameFontSize}
-            fontFamily={columnNameFontFamily}
-            color={columnNameTextColor}
-          >
-            {column.data().name}
-          </Paragraph>
+          {column.data().header ||
+            <Paragraph
+              fontSize={columnNameFontSize}
+              fontFamily={columnNameFontFamily}
+              color={columnNameTextColor}
+            >
+              {column.data().name}
+            </Paragraph>
+          }
           {isWithCountBadge && <SumWrapper>
             <ParagraphWrapper
               backgroundColor={badgeBackgroundColor}
