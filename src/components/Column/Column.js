@@ -1,5 +1,5 @@
 import React from 'react'
-import { FlatList } from 'react-native'
+import { FlatList, RefreshControl, Text, View } from 'react-native';
 import {
   bool,
   func,
@@ -13,27 +13,32 @@ import {
   deviceWidth,
   ios
 } from '../../constants'
-import EmptyColumn from '../EmptyColumn/EmptyColumn'
+// import EmptyColumn from '../EmptyColumn/EmptyColumn'
 import {
   ColumnWrapper,
   ParagraphWrapper,
   Paragraph,
   RowContainer,
   RowWrapper,
-  SumWrapper
-} from './Column.styled'
+  SumWrapper,
+  RowContainerTitle,
+} from './Column.styled';
 
-const COLUMN_WIDTH = 0.85 * deviceWidth
+const COLUMN_WIDTH = 0.78 * deviceWidth
 const PADDING = 32
 const ONE_COLUMN_WIDTH = deviceWidth - PADDING
+import I18n from '../../../../../app/i18n';
 
 class Column extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
+    this.state = {
+      refreshing: false
+    }
   }
 
   componentDidMount() {
-    const { column, boardRepository } = this.props
+    const { column, boardRepository, onRefresh, onLoadMore } = this.props
 
     boardRepository.addListener(column.id(), 'reload', () => this.forceUpdate())
   }
@@ -80,14 +85,14 @@ class Column extends React.Component {
       item
     }
     return (
-      <RowWrapper
-        ref={ref => this.setItemRef(item, ref)}
-        collapsable={false}
-        onLayout={this.updateItemWithLayout(item)}
-        key={item.id.toString()}
-      >
-        {renderWrapperRow(props)}
-      </RowWrapper>
+        <RowWrapper
+            ref={ref => this.setItemRef(item, ref)}
+            collapsable={false}
+            onLayout={this.updateItemWithLayout(item)}
+            key={item.id.toString()}
+        >
+          {renderWrapperRow(props)}
+        </RowWrapper>
     )
   }
 
@@ -134,7 +139,6 @@ class Column extends React.Component {
 
   onMomentumScrollEnd = (event) => {
     const { onScrollingEnded } = this.props
-
     this.endScrolling(event)
     onScrollingEnded()
   }
@@ -155,6 +159,16 @@ class Column extends React.Component {
     const { column, boardRepository } = this.props
 
     boardRepository.setListView(column.id(), ref)
+  }
+
+  onEndReached = () => {
+    const {column, onLoadMore} = this.props;
+    onLoadMore && onLoadMore(true, column);
+  }
+
+  handleRefresh = () => {
+    const {column, onRefresh} = this.props;
+    onRefresh && onRefresh(column);
   }
 
   render() {
@@ -178,72 +192,104 @@ class Column extends React.Component {
       oneColumn,
       movingMode,
       boardRepository,
-      columnWidth
+      borderColor,// dung add
+      borderWidth,// dung add
     } = this.props
 
     const colElements = boardRepository.items(column.id()).length - 1
 
     const ColumnComponent = (
-      <ColumnWrapper
-        backgroundColor={columnBackgroundColor}
-        borderRadius={columnBorderRadius}
-        ref={this.setColumnRef}
-        collapsable={false}
-        onLayout={this.updateColumnWithLayout}
-        columnHeight={columnHeight}
-        width={oneColumn ? ONE_COLUMN_WIDTH : columnWidth?columnWidth:COLUMN_WIDTH}
-        marginRight={oneColumn ? 0 : 8}
-      >
-        <RowContainer>
-          <Paragraph
-            fontSize={columnNameFontSize}
-            fontFamily={columnNameFontFamily}
-            color={columnNameTextColor}
-          >
-            {column.data().name}
-          </Paragraph>
-          {isWithCountBadge && <SumWrapper>
-            <ParagraphWrapper
-              backgroundColor={badgeBackgroundColor}
-              width={badgeWidth}
-              height={badgeHeight}
-              borderRadius={badgeBorderRadius}
+        <ColumnWrapper
+            backgroundColor={columnBackgroundColor}
+            borderRadius={columnBorderRadius}
+            ref={this.setColumnRef}
+            collapsable={false}
+            onLayout={this.updateColumnWithLayout}
+            columnHeight={columnHeight}
+            width={oneColumn ? ONE_COLUMN_WIDTH : COLUMN_WIDTH}
+            marginRight={oneColumn ? 0 : 8}
+            // borderColor={borderColor} // dung add
+            // borderWidth={borderWidth} // dung add
+        >
+          <RowContainerTitle>
+            {/*<Paragraph*/}
+            {/*    fontSize={columnNameFontSize}*/}
+            {/*    fontFamily={columnNameFontFamily}*/}
+            {/*    color={columnNameTextColor}*/}
+            {/*>*/}
+            {/*  {`${I18n.t(column.data().name)}`}*/}
+            {/*</Paragraph>*/}
+            {/*dung edit text*/}
+            <Text style={{
+              fontSize: columnNameFontSize,
+              color: columnNameTextColor,
+              fontWeight: 'bold'
+            }}
             >
-              <Paragraph
-                fontSize={badgeTextFontSize}
-                fontFamily={badgeTextFontFamily}
-                color={badgeTextColor}
-                lineHeight={ios ? null : badgeTextFontSize * 1.6}
+              {`${I18n.t(column.data().name)}`}
+            </Text>
+            {isWithCountBadge && <SumWrapper>
+              <ParagraphWrapper
+                  backgroundColor={badgeBackgroundColor}
+                  // dung edit text
+                  // width={badgeWidth}
+                  // height={badgeHeight}
+                  // borderRadius={badgeBorderRadius}
               >
-                {colElements.toString()}
-              </Paragraph>
-            </ParagraphWrapper>
-          </SumWrapper>
+                <Text style={{
+                  fontSize: columnNameFontSize,
+                  color: columnNameTextColor,
+                  fontWeight: 'bold'
+                }}
+                >
+                  {`(${colElements.toString()})`}
+                </Text>
+                {/*dung edit text*/}
+                {/*<Paragraph*/}
+                {/*    fontSize={badgeTextFontSize}*/}
+                {/*    fontFamily={badgeTextFontFamily}*/}
+                {/*    color={badgeTextColor}*/}
+                {/*    lineHeight={ios ? null : badgeTextFontSize * 1.6}*/}
+                {/*>*/}
+                {/*  {`(${colElements.toString()})`}*/}
+                {/*</Paragraph>*/}
+              </ParagraphWrapper>
+            </SumWrapper>
+            }
+          </RowContainerTitle>
+          {boardRepository
+              .items(column.id()).length - 1 === 0 ?
+              (emptyComponent
+                      ? emptyComponent()
+                      : <View /> //dug add
+                  // <EmptyColumn {...this.props} marginTop={columnHeight / 3} />
+              )
+              : <FlatList
+                  data={boardRepository.items(column.id())}
+                  ref={this.setListView}
+                  onScroll={this.handleScroll}
+                  scrollEventThrottle={0}
+                  onMomentumScrollEnd={this.onMomentumScrollEnd}
+                  onScrollEndDrag={this.onScrollEndDrag}
+                  onChangeVisibleRows={this.handleChangeVisibleItems}
+                  renderItem={item => this.renderWrapperRow(item.item)}
+                  keyExtractor={item => item.row().id.toString()}
+                  scrollEnabled={!movingMode}
+                  onContentSizeChange={this.onContentSizeChange}
+                  showsVerticalScrollIndicator={false}
+                  enableEmptySections
+                  onEndReached={this.onEndReached} // Dung add refreshControl onEndReached
+                  refreshControl={( // Dung add refreshControl
+                      <RefreshControl
+                          refreshing={this.state.refreshing}
+                          onRefresh={this.handleRefresh}
+                          // tintColor={themes[theme].auxiliaryText}
+                      />
+                  )}
+                  onEndReachedThreshold={0.5}
+              />
           }
-        </RowContainer>
-        {boardRepository
-          .items(column.id()).length - 1 === 0 ?
-          (emptyComponent
-            ? emptyComponent()
-            : <EmptyColumn {...this.props} marginTop={columnHeight / 3} />
-          )
-          : <FlatList
-            data={boardRepository.items(column.id())}
-            ref={this.setListView}
-            onScroll={this.handleScroll}
-            scrollEventThrottle={0}
-            onMomentumScrollEnd={this.onMomentumScrollEnd}
-            onScrollEndDrag={this.onScrollEndDrag}
-            onChangeVisibleRows={this.handleChangeVisibleItems}
-            renderItem={item => this.renderWrapperRow(item.item)}
-            keyExtractor={item => item.row().id.toString()}
-            scrollEnabled={!movingMode}
-            onContentSizeChange={this.onContentSizeChange}
-            showsVerticalScrollIndicator={false}
-            enableEmptySections
-          />
-        }
-      </ColumnWrapper>
+        </ColumnWrapper>
     )
 
     return ColumnComponent
@@ -251,21 +297,23 @@ class Column extends React.Component {
 }
 
 Column.defaultProps = {
-  badgeBackgroundColor: colors.blurple,
+  badgeBackgroundColor: colors.white,
   badgeBorderRadius: 15,
   badgeHeight: 30,
   badgeWidth: 30,
-  badgeTextColor: colors.white,
+  badgeTextColor: colors.tintColor,
   badgeTextFontFamily: '',
-  badgeTextFontSize: 14,
-  columnBackgroundColor: colors.fallingStar,
+  badgeTextFontSize: 16,
+  columnBackgroundColor: colors.white,
   columnBorderRadius: 6,
   columnHeight: 650,
-  columnNameTextColor: colors.blurple,
+  columnNameTextColor: colors.tintColor,
   columnNameFontFamily: '',
-  columnNameFontSize: 18,
+  columnNameFontSize: 16,
   isWithCountBadge: true,
-  oneColumn: false
+  oneColumn: false,
+  borderColor: colors.tintColor, // dung add
+  borderWidth: 0.3 // dung add,
 }
 
 Column.propTypes = {
@@ -293,7 +341,9 @@ Column.propTypes = {
   onScrollingStarted: func.isRequired,
   renderWrapperRow: func.isRequired,
   boardRepository: object,
-  unsubscribeFromMovingMode: func.isRequired
+  unsubscribeFromMovingMode: func.isRequired,
+  borderColor: string.isRequired,
+  borderWidth: number.isRequired,
 }
 
 export default Column

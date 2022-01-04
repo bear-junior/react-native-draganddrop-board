@@ -23,16 +23,13 @@ import { BoardWrapper } from './Board.styled'
 
 const MAX_RANGE = 100
 const MAX_DEG = 30
-let CARD_WIDTH = 0.85 * deviceWidth
+const CARD_WIDTH = 0.78 * deviceWidth
 const STATUSBAR_HEIGHT = ios ? (isX() ? 44 : 20) : StatusBar.currentHeight
 
 class Board extends React.Component {
   constructor(props) {
     super(props)
 
-    if (this.props.columnWidth) {
-      CARD_WIDTH = this.props.columnWidth;
-    }
     this.state = {
       boardPositionY: 0,
       rotate: new Animated.Value(0),
@@ -64,52 +61,48 @@ class Board extends React.Component {
   }
 
   onPanResponderMove = (event, gesture) => {
-    try {
-      const {
-        draggedItem,
-        movingMode,
-        pan,
-        startingX
-      } = this.state
-      const { boardRepository } = this.props
+    const {
+      draggedItem,
+      movingMode,
+      pan,
+      startingX
+    } = this.state
+    const { boardRepository } = this.props
 
-      if (movingMode) {
-        this.x = event.nativeEvent.pageX
-        this.y = event.nativeEvent.pageY
+    if (movingMode) {
+      this.x = event.nativeEvent.pageX
+      this.y = event.nativeEvent.pageY
 
-        Animated.event([
-          null, { dx: pan.x, dy: pan.y }
-        ], {
-          listener: null,
-          useNativeDriver: false,
-        })(event, gesture)
+      Animated.event([
+        null, { dx: pan.x, dy: pan.y }
+      ], {
+        listener: null,
+        useNativeDriver: false,
+      })(event, gesture)
+      if (startingX + gesture.dx < -50 && gesture.vx < 0) {
+        this.carousel.snapToPrev()
+      }
+      if (startingX + gesture.dx + CARD_WIDTH - 50 > deviceWidth && gesture.vx > 0) {
+        this.carousel.snapToNext()
+      }
 
-        if (startingX + gesture.dx < -50 && gesture.vx < 0) {
-          this.carousel.snapToPrev()
-        }
-        if (startingX + gesture.dx + CARD_WIDTH - 50 > deviceWidth && gesture.vx > 0) {
-          this.carousel.snapToNext()
-        }
-
-        const columnId = this.carousel.currentIndex
-        const columnAtPosition = boardRepository.move(draggedItem, this.x, this.y, columnId)
-        if (columnAtPosition) {
-          const { scrolling, offset } = boardRepository.scrollingPosition(columnAtPosition, this.x, this.y, columnId)
-          if (this.shouldScroll(scrolling, offset, columnAtPosition)) {
-            this.scroll(columnAtPosition, draggedItem, offset)
-          }
+      const columnId = this.carousel.currentIndex
+      const columnAtPosition = boardRepository
+          .move(draggedItem, this.x, this.y, columnId)
+      if (columnAtPosition) {
+        const { scrolling, offset } = boardRepository
+            .scrollingPosition(columnAtPosition, this.x, this.y, columnId)
+        if (this.shouldScroll(scrolling, offset, columnAtPosition)) {
+          this.scroll(columnAtPosition, draggedItem, offset)
         }
       }
-    } catch (error) {
-      console.log("columnAtPosition", error)
     }
-
   }
 
   shouldScroll = (scrolling, offset, column) => {
     const placeToScroll = ((offset < 0
-      && column.scrollOffset() > 0)
-      || (offset > 0 && column.scrollOffset() < column.contentHeight()))
+            && column.scrollOffset() > 0)
+        || (offset > 0 && column.scrollOffset() < column.contentHeight()))
 
     return scrolling && offset !== 0 && placeToScroll
   }
@@ -143,29 +136,18 @@ class Board extends React.Component {
   }
 
   endMoving = () => {
-    try {
-      this.setState({ movingMode: false })
-      const { draggedItem, pan, srcColumnId } = this.state
-      const { boardRepository, onDragEnd } = this.props
+    this.setState({ movingMode: false })
+    const { draggedItem, pan, srcColumnId } = this.state
+    const { boardRepository, onDragEnd } = this.props
 
-      boardRepository.show(draggedItem.columnId(), draggedItem)
-      boardRepository.notify(draggedItem.columnId(), 'reload')
+    boardRepository.show(draggedItem.columnId(), draggedItem)
+    boardRepository.notify(draggedItem.columnId(), 'reload')
 
-      const destColumnId = draggedItem.columnId()
-      pan.setValue({ x: 0, y: 0 })
-      this.setState({ startingX: 0, startingY: 0 })
+    const destColumnId = draggedItem.columnId()
+    pan.setValue({ x: 0, y: 0 })
+    this.setState({ startingX: 0, startingY: 0 })
 
-      return onDragEnd && onDragEnd(boardRepository.columns()[srcColumnId - 1], boardRepository.columns()[destColumnId - 1], draggedItem)
-
-    } catch (error) {
-      const { draggedItem, srcColumnId } = this.state
-      const { onDragEnd } = this.props
-      const destColumnId = draggedItem.columnId()
-      this.setState({ movingMode: false, startingX: 0, startingY: 0 })
-      console.log("endMoving", error)
-      return onDragEnd && onDragEnd(boardRepository.columns()[srcColumnId - 1], boardRepository.columns()[destColumnId - 1], draggedItem)
-
-    }
+    return onDragEnd && onDragEnd(srcColumnId, destColumnId, draggedItem)
   }
 
   onPanResponderRelease = () => {
@@ -184,12 +166,12 @@ class Board extends React.Component {
   rotate = (toValue) => {
     const { rotate } = this.state
     Animated.spring(
-      rotate,
-      {
-        toValue,
-        friction: 5,
-        useNativeDriver: true
-      }
+        rotate,
+        {
+          toValue,
+          friction: 5,
+          useNativeDriver: true
+        }
     ).start()
   }
 
@@ -243,7 +225,7 @@ class Board extends React.Component {
           draggedItem: item,
           srcColumnId: item.columnId(),
           startingX: x,
-          startingY: dy - boardPositionY - STATUSBAR_HEIGHT - (ios ? 0 : (dy - y))
+          startingY: dy - boardPositionY - STATUSBAR_HEIGHT - (ios ? 0 : (dy - y)) - 200
         })
         this.rotate(MAX_DEG)
       }
@@ -269,7 +251,7 @@ class Board extends React.Component {
         const columnIndex = this.carousel.currentIndex
 
         if (columnId - 1 === columnIndex) {
-          open(item.row())
+          open(item) // Dung add
         }
       } else {
         this.endMoving()
@@ -316,11 +298,11 @@ class Board extends React.Component {
   }
 
   renderWrapperRow = (data) => (
-    <Card
-      {...data}
-      {...this.props}
-      width={CARD_WIDTH}
-    />
+      <Card
+          {...data}
+          {...this.props}
+          width={CARD_WIDTH}
+      />
   )
 
   setScrollViewRef = (element) => {
@@ -336,52 +318,56 @@ class Board extends React.Component {
     const {
       boardBackground,
       boardRepository,
-      data
+      data,
+      onLoadMore,
+      onRefresh
     } = this.props
 
     return (
-      <BoardWrapper
-        {...this.panResponder.panHandlers}>
         <BoardWrapper
-          onLayout={(evt) => this.setBoardPositionY(evt.nativeEvent.layout.y)}
-          backgroundColor={boardBackground}
-        >
-          <Carousel
-            ref={(c) => { this.carousel = c }}
-            data={boardRepository.columns()}
-            onScrollEndDrag={this.onScrollEnd}
-            onScroll={this.cancelMovingSubscription}
-            scrollEnabled={!movingMode}
-            renderItem={item => (
-              <Column
-                {...this.props}
-                key={item.item.data().id.toString()}
-                column={item.item}
-                movingMode={movingMode}
-                boardRepository={boardRepository}
-                onPressIn={this.onPressIn}
-                onPress={this.onPress}
-                renderWrapperRow={this.renderWrapperRow}
-                onScrollingStarted={this.onScrollingStarted}
-                onScrollingEnded={this.onScrollingEnded}
-                unsubscribeFromMovingMode={this.cancelMovingSubscription}
+            {...this.panResponder.panHandlers}>
+          <BoardWrapper
+              onLayout={(evt) => this.setBoardPositionY(evt.nativeEvent.layout.y)}
+              backgroundColor={boardBackground}
+          >
+            <Carousel
+                ref={(c) => { this.carousel = c }}
+                data={boardRepository.columns()}
+                onScrollEndDrag={this.onScrollEnd}
+                onScroll={this.cancelMovingSubscription}
+                scrollEnabled={!movingMode}
+                renderItem={item => (
+                    <Column
+                        {...this.props}
+                        key={item.item.data().id.toString()}
+                        column={item.item}
+                        movingMode={movingMode}
+                        boardRepository={boardRepository}
+                        onPressIn={this.onPressIn}
+                        onPress={this.onPress}
+                        renderWrapperRow={this.renderWrapperRow}
+                        onScrollingStarted={this.onScrollingStarted}
+                        onScrollingEnded={this.onScrollingEnded}
+                        unsubscribeFromMovingMode={this.cancelMovingSubscription}
+                        oneColumn={boardRepository.columns().length === 1}
+                        onLoadMore={onLoadMore}
+                        onRefresh={onRefresh}
+                    />
+                )}
+                sliderWidth={deviceWidth}
+                itemWidth={CARD_WIDTH}
                 oneColumn={boardRepository.columns().length === 1}
-              />
-            )}
-            sliderWidth={deviceWidth}
-            itemWidth={CARD_WIDTH}
-            oneColumn={boardRepository.columns().length === 1}
-          />
+            />
 
-          {this.movingTask()}
-        </BoardWrapper >
-      </BoardWrapper>
+            {this.movingTask()}
+          </BoardWrapper >
+        </BoardWrapper>
     )
   }
 }
 
 Board.defaultProps = {
-  boardBackground: colors.deepComaru
+  boardBackground: colors.white //dung change
 }
 
 Board.propTypes = {

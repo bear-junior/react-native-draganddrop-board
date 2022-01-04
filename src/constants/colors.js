@@ -7,7 +7,9 @@ const colors = {
   fallingStar: '#FAFAFA',
   officer: '#2C3A47',
   wildWatermelon: '#ff6b81',
-  white: '#FFFFFF'
+  white: '#FFFFFF',
+  tintColor: '#686DE0',
+  backdrop: '#E9E9FF',
 }
 
 export { colors }

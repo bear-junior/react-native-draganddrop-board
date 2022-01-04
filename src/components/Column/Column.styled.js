@@ -5,15 +5,19 @@ import {
   fontFamily,
   fontSize,
   marginRight,
-  lineHeight
+  lineHeight,
+  borderColor,
+  borderWidth,
 } from 'styled-system'
-
+//dung add
 const ColumnWrapper = styled.View`
   paddingHorizontal: 8;
   ${borderRadius};
   maxWidth: 400;
   ${marginRight};
-  ${props => `height: ${props.columnHeight}`}
+  ${props => `height: ${props.columnHeight}`};
+  ${borderColor};
+  ${borderWidth};
 `
 
 const ParagraphWrapper = styled.View`
@@ -28,6 +32,12 @@ const RowContainer = styled.View`
   paddingHorizontal: 10;
   justifyContent:center;
 
+`
+//dung add
+const RowContainerTitle = styled.View`
+  flexDirection: row;
+  paddingVertical: 8;
+  paddingHorizontal: 10;
 `
 
 const Paragraph = styled.Text`
@@ -53,5 +63,6 @@ export {
   Paragraph,
   RowContainer,
   RowWrapper,
-  SumWrapper
+  SumWrapper,
+  RowContainerTitle
 }
